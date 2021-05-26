@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31205.134
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CetTodoWeb", "CetTodoWeb\CetTodoWeb.csproj", "{C10A2A69-0258-4E71-8D2D-468B006670CC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C10A2A69-0258-4E71-8D2D-468B006670CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C10A2A69-0258-4E71-8D2D-468B006670CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C10A2A69-0258-4E71-8D2D-468B006670CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C10A2A69-0258-4E71-8D2D-468B006670CC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DD96861D-D9B3-4326-87CB-070A31E1FAA4}
+	EndGlobalSection
+EndGlobal
