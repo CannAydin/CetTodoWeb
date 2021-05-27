@@ -19,6 +19,24 @@
         <label asp-for="ShowAll" class="control-label"></label>
         <input asp-for="ShowAll" class="align-content-lg-center" />
     </div>
+    <div class="form-control-lg">
+        <label asp-for="ShowWorks" class="control-label"></label>
+        <input asp-for="ShowWorks" class="align-content-lg-center" />
+    </div>
+    <div class="form-control-lg">
+        <label asp-for="ShowCourses" class="control-label"></label>
+        <input asp-for="ShowCourses" class="align-content-lg-center" />
+    </div>
+    <div class="form-control-lg">
+        <label asp-for="ShowHobbies" class="control-label"></label>
+        <input asp-for="ShowHobbies" class="align-content-lg-center" />
+    </div>
+    @*<input asp-for="ShowWorks" type="radio" id="ShowWorks" name="Search" value="ShowWorks">
+    <label asp-for="ShowWorks">Works</label><br>
+    <input asp-for="ShowCourses" type="radio" id="ShowCourses" name="Search" value="ShowCourses">
+    <label asp-for="ShowCourses">-Courses</label><br>
+    <input asp-for="ShowHobbies" type="radio" id="ShowHobbies" name="Search" value="ShowHobbies">*@
+    <label asp-for="ShowHobbies">Hobbies</label>
     <div class="form-group">
         <input type="submit" value="Search" class="btn btn-primary" />
     </div>
