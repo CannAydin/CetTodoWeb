@@ -1,5 +1,4 @@
-﻿@*@model IEnumerable<CetTodoWeb.Models.Category>*@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -28,6 +27,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Todo" asp-action="Index">Todo</a>
                         </li>
+                        @await Component.InvokeAsync("CategoryMenu")
                     </ul>
                     @*<ul class="navbar-nav flex-grow-1">
                             @foreach (var item in Model)

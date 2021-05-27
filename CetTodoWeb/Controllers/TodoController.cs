@@ -27,31 +27,21 @@ namespace CetTodoWeb.Controllers
             
             /* Second Option AsQueryable önemli bir method */
             var query = _context.TodoItems.Include(t => t.Category).AsQueryable();
+            var isCompleted = query.Where(t => t.IsCompleted);
+            if (searchModel.categoryId != 0)
+            {
+                query = query.Where(t => t.Category.Id == searchModel.categoryId);
+            }
             if (!searchModel.ShowAll)
             {
                 query = query.Where(t => !t.IsCompleted);
             }
-            if (searchModel.ShowCourses)
-            {
-                query = query.Where(t => t.Category.Name.Contains("Courses"));
-            }
-            if (searchModel.ShowHobbies)
-            {
-                query = query.Where(t => t.Category.Name.Contains("Hobbies"));
-            }
-            if (searchModel.ShowWorks)
-            {
-                query = query.Where(t => t.Category.Name.Contains("Work"));
-            }
-            //if (searchModel.ShowWorks == true && searchModel.ShowCourses ==true && searchModel.ShowHobbies == true)
-            //{
-            //    query = query.Where(t => t.Category.Name == "Courses").Where(t => t.Category.Name == "Hobbies").Where(t => t.Category.Name == "Work");
-            //}
             if (!String.IsNullOrWhiteSpace(searchModel.SearchText))
             {
                 query = query.Where(t => t.Title.Contains(searchModel.SearchText));
             }
             query = query.OrderBy(t => t.DueDate);
+            //isCompleted.ForEachAsync(item => query.)
 
             searchModel.Result = await query.ToListAsync();
 

@@ -11,39 +11,27 @@
 </p>
 
 <form asp-action="Index" asp-controller="Todo" method="get">
-    <div class="form-group">
-        <label asp-for="SearchText" class="control-label"></label>
-        <input asp-for="SearchText" class="form-control" />
+    <div class="flex-column">
+        <label asp-for="SearchText" class="control-label"><h3>Search</h3></label>
+        <input asp-for="SearchText" class="input-group-sm" />
     </div>
     <div class="form-control-lg">
-        <label asp-for="ShowAll" class="control-label"></label>
+        <label asp-for="ShowAll" class="control-label"><h5>Show All</h5></label>
         <input asp-for="ShowAll" class="align-content-lg-center" />
     </div>
-    <div class="form-control-lg">
-        <label asp-for="ShowWorks" class="control-label"></label>
-        <input asp-for="ShowWorks" class="align-content-lg-center" />
-    </div>
-    <div class="form-control-lg">
-        <label asp-for="ShowCourses" class="control-label"></label>
-        <input asp-for="ShowCourses" class="align-content-lg-center" />
-    </div>
-    <div class="form-control-lg">
-        <label asp-for="ShowHobbies" class="control-label"></label>
-        <input asp-for="ShowHobbies" class="align-content-lg-center" />
-    </div>
     @*<input asp-for="ShowWorks" type="radio" id="ShowWorks" name="Search" value="ShowWorks">
-    <label asp-for="ShowWorks">Works</label><br>
-    <input asp-for="ShowCourses" type="radio" id="ShowCourses" name="Search" value="ShowCourses">
-    <label asp-for="ShowCourses">-Courses</label><br>
-    <input asp-for="ShowHobbies" type="radio" id="ShowHobbies" name="Search" value="ShowHobbies">*@
-    <label asp-for="ShowHobbies">Hobbies</label>
+        <label asp-for="ShowWorks">Works</label><br>
+        <input asp-for="ShowCourses" type="radio" id="ShowCourses" name="Search" value="ShowCourses">
+        <label asp-for="ShowCourses">-Courses</label><br>
+        <input asp-for="ShowHobbies" type="radio" id="ShowHobbies" name="Search" value="ShowHobbies">
+        <label asp-for="ShowHobbies">Hobbies</label>*@
     <div class="form-group">
         <input type="submit" value="Search" class="btn btn-primary" />
     </div>
 </form>
 
-<table class="table">
-    <thead>
+<table class="table" style="border-collapse:collapse; border-top-left-radius: 20px; border-top-right-radius: 20px; overflow: hidden">
+    <thead style="background-color: #2DD7E5">
         <tr>
             <th>
                 Category
@@ -64,39 +52,92 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Result) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DueDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RemainingHour)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsCompleted)
-            </td>
+        @foreach (var item in Model.Result)
+        {
 
-            <td>
-                @if (item.IsCompleted)
+            @if (item.IsCompleted)
+            {
+                <tr style="background-color:#80FF00">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Category.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DueDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RemainingHour)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsCompleted)
+                    </td>
+
+                    <td>
+                        @if (item.IsCompleted)
+                        {
+                            <a asp-action="MakeInComplete" asp-route-id="@item.Id" asp-route-showall="@Model.ShowAll">Incomplete</a>
+                        }
+                        else
+                        {
+                            <a asp-action="MakeComplete" asp-route-id="@item.Id" asp-route-showall="@Model.ShowAll">Complete</a>
+                        }
+                        |
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+            else
                 {
-                    <a asp-action="MakeInComplete" asp-route-id="@item.Id" asp-route-showall ="@Model.ShowAll">Incomplete</a>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Category.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td style="color: red">
+                            @Html.DisplayFor(modelItem => item.DueDate)
+                        </td>
+                        @if (item.RemainingHour <= 24) 
+                        { 
+                            <td style="font-weight: bold">
+                            @Html.DisplayFor(modelItem => item.RemainingHour)
+                        </td>
+                        }
+                        else 
+                        { 
+                            <td>
+                            @Html.DisplayFor(modelItem => item.RemainingHour)
+                        </td>
+                        }
+                        
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsCompleted)
+                        </td>
+
+                        <td>
+                            @if (item.IsCompleted)
+                            {
+                                <a asp-action="MakeInComplete" asp-route-id="@item.Id" asp-route-showall="@Model.ShowAll">Incomplete</a>
+                            }
+                            else
+                            {
+                                <a asp-action="MakeComplete" asp-route-id="@item.Id" asp-route-showall="@Model.ShowAll">Complete</a>
+                            }
+                            |
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                    </tr>
+
                 }
-                else
-                {
-                    <a asp-action="MakeComplete" asp-route-id="@item.Id" asp-route-showall ="@Model.ShowAll">Complete</a>
-                }
-                |
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+
+        }
+
     </tbody>
 </table>
