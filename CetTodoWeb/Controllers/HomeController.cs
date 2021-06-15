@@ -13,6 +13,9 @@ namespace CetTodoWeb.Controllers
 {
     public class HomeController : Controller
     {
+        /// <summary>
+        /// Bu Deneme amaçlı olan bir şey
+        /// </summary>
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext dbContext;
 
