@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CetTodoWeb.Data;
 using CetTodoWeb.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -18,17 +19,26 @@ namespace CetTodoWeb.Controllers
         /// </summary>
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext dbContext;
+        private readonly UserManager<User> _userManager; 
 
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext dbContext)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext dbContext, UserManager<User> userManager)
         {
             _logger = logger;
             this.dbContext = dbContext;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
         {
-            var query = dbContext.TodoItems.Include(t => t.Category).Where(t => !t.IsCompleted).OrderBy(t => t.DueDate).Take(3);
-            List<TodoItem> result = await query.ToListAsync();
+            List<TodoItem> result;
+            if (User.Identity.IsAuthenticated)
+            {
+                var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+                var query = dbContext.TodoItems.Include(t => t.Category).Where(t => t.UserId == currentUser.Id && !t.IsCompleted).OrderBy(t => t.DueDate).Take(3);
+                result = await query.ToListAsync();
+            }
+            else result = new List<TodoItem>();
+            
             return View(result);
         }
 

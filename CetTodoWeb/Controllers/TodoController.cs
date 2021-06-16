@@ -7,26 +7,34 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CetTodoWeb.Data;
 using CetTodoWeb.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CetTodoWeb.Controllers
 {
+    // Buraya bunu yazarsak hepsi için [Authorize] gerektirir.
     public class TodoController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public TodoController(ApplicationDbContext context)
+        public TodoController(ApplicationDbContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
+        // [AllowAnonymous]
+        // Buraya bunu yazarsak yukarda authorize olsa bile yine authorize gerektirmez. 
         // GET: Todo
         public async Task<IActionResult> Index(SearchViewModel searchModel)
         {
             //var applicationDbContext = _context.TodoItems.Include(t => t.Category).Where(t => searchModel.ShowAll || t.IsCompleted == false).OrderBy(t => t.DueDate);
 
-            
+
             /* Second Option AsQueryable önemli bir method */
-            var query = _context.TodoItems.Include(t => t.Category).AsQueryable();
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+            var query = _context.TodoItems.Include(t => t.Category).Where(t => t.UserId == currentUser.Id);
             var isCompleted = query.Where(t => t.IsCompleted);
             if (searchModel.categoryId != 0)
             {
@@ -68,6 +76,7 @@ namespace CetTodoWeb.Controllers
         }
 
         // GET: Todo/Create
+        [Authorize]
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
@@ -79,8 +88,11 @@ namespace CetTodoWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("Id,Title,Description,IsCompleted,DueDate,CategoryId")] TodoItem todoItem)
         {
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+            todoItem.UserId = currentUser.Id;
             if (ModelState.IsValid)
             {
                 _context.Add(todoItem);
@@ -100,6 +112,11 @@ namespace CetTodoWeb.Controllers
             }
 
             var todoItem = await _context.TodoItems.FindAsync(id);
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+            if(todoItem.UserId != currentUser.Id)
+            {
+                return Unauthorized();
+            }
             if (todoItem == null)
             {
                 return NotFound();
@@ -113,7 +130,7 @@ namespace CetTodoWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,IsCompleted,DueDate,CategoryId")] TodoItem todoItem)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,IsCompleted,DueDate,CategoryId,CreatedDate,UserId")] TodoItem todoItem)
         {
             if (id != todoItem.Id)
             {
@@ -124,6 +141,18 @@ namespace CetTodoWeb.Controllers
             {
                 try
                 {
+                    var oldTodo = await _context.TodoItems.FindAsync(id);
+                    var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+                    if(oldTodo.UserId != currentUser.Id)
+                    {
+                        return Unauthorized();
+                    }
+                    oldTodo.Title = todoItem.Title;
+                    oldTodo.CompletedDate = todoItem.CompletedDate;
+                    oldTodo.CategoryId = todoItem.CategoryId;
+                    oldTodo.DueDate = todoItem.DueDate;
+                    oldTodo.Description = todoItem.Description;
+                    oldTodo.IsCompleted = todoItem.IsCompleted;
                     _context.Update(todoItem);
                     await _context.SaveChangesAsync();
                 }

@@ -20,7 +20,7 @@ namespace CetTodoWeb.Models
         [DataType(DataType.MultilineText)]
         public string Description { get; set; }
 
-        [Display(Name ="Is Completed")]
+        [Display(Name = "Is Completed")]
         public bool IsCompleted { get; set; }
 
         [Display(Name = "Due Date")]
@@ -47,5 +47,7 @@ namespace CetTodoWeb.Models
 
         public int CategoryId { get; set; }
         public virtual Category Category { get; set; }
+        public string UserId { get; set; }
+        public virtual User User { get; set; }
     }
 }

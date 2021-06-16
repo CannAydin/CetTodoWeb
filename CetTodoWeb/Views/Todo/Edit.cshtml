@@ -39,6 +39,8 @@
                 <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <input asp-for="CreatedDate" type="hidden" class="form-control" />
+                <input asp-for="UserId" type="hidden" class="form-control" />
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
