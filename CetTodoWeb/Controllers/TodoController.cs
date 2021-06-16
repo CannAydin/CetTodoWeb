@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace CetTodoWeb.Controllers
 {
     // Buraya bunu yazarsak hepsi için [Authorize] gerektirir.
+    [Authorize]
     public class TodoController : Controller
     {
         private readonly ApplicationDbContext _context;

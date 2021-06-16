@@ -13,5 +13,6 @@ namespace CetTodoWeb.Models
         [MaxLength(50)]
         public string Name { get; set; }
         public virtual List<TodoItem> TodoItems { get; set; }
+        public string UserId { get; set; }
     }
 }
